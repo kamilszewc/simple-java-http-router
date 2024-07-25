@@ -10,8 +10,8 @@ group = 'io.github.kamilszewc'
 version = '0.1'
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
 }
 
 repositories {
@@ -54,12 +54,12 @@ publishing {
     publications {
 
         mavenJava(MavenPublication) {
-            artifactId = 'simple-router'
+            artifactId = 'simple-java-http-router'
             from components.java
             pom {
-                name = 'Simple rest-api router'
-                description = 'Simple rest-api router'
-                url = 'https://github.com/kamilszewc/simple-router'
+                name = 'Simple Java Http Router'
+                description = 'Simple Java router for building http services'
+                url = 'https://github.com/kamilszewc/simple-java-http-router'
                 licenses {
                     license {
                         name = 'The Apache License, Version 2.0'
@@ -74,9 +74,9 @@ publishing {
                     }
                 }
                 scm {
-                    connection = 'scm:git:git://github.com/kamilszewc/simple-router.git'
-                    developerConnection = 'scm:git:https://github.com/kamilszewc/simple-router.git'
-                    url = 'https://github.com/kamilszewc/simple-router.git'
+                    connection = 'scm:git:git://github.com/kamilszewc/simple-java-http-router.git'
+                    developerConnection = 'scm:git:https://github.com/kamilszewc/simple-java-http-router.git'
+                    url = 'https://github.com/kamilszewc/simple-java-http-router.git'
                 }
             }
         }

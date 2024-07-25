@@ -10,13 +10,13 @@ public class SimpleRouter {
         POST,
         PUT,
         PATCH,
-        DELETE
+        DELETE,
+        ANY
     }
 
     private List<Route> routes = new ArrayList<>();
 
-    protected SimpleRouter() {
-    }
+    public SimpleRouter() {}
 
     public void addRoute(Route route) {
         routes.add(route);

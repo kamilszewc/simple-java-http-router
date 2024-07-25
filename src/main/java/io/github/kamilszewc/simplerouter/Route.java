@@ -47,9 +47,11 @@ public class Route {
 
     public RoutingContext checkRouting(Request request) throws NoRoutingException {
         // First check if method fits
-        var requestMethod = request.getMethod();
-        if (method != requestMethod) {
-            throw new NoRoutingException();
+        if (method != SimpleRouter.Method.ANY) {
+            var requestMethod = request.getMethod();
+            if (method != requestMethod) {
+                throw new NoRoutingException();
+            }
         }
 
         // Get request path
@@ -76,7 +78,6 @@ public class Route {
                 if (!pathElement.equals(requestPathElement)) {
                     throw new NoRoutingException();
                 }
-
 
             } catch (Exception ex) {
                 throw new NoRoutingException();

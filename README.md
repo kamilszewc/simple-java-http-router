@@ -10,13 +10,13 @@ Usage with maven:
 <dependency>
     <groupId>io.github.kamilszewc</groupId>
     <artifactId>simple-java-http-router</artifactId>
-    <version>0.1</version>
+    <version>0.2</version>
 </dependency>
 ```
 
 Usage with gradle:
 
 ```groovy
-implementation 'io.github.kamilszewc:simple-java-http-router:0.1'
+implementation 'io.github.kamilszewc:simple-java-http-router:0.2'
 ```
 

@@ -7,7 +7,7 @@ plugins {
 }
 
 group = 'io.github.kamilszewc'
-version = '0.1'
+version = '0.2'
 
 java {
     sourceCompatibility = JavaVersion.VERSION_11
@@ -42,11 +42,11 @@ publishing {
             name = "OSSRH"
             url = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
             credentials {
-                if (project.properties.containsKey('mavenCentralUser')) {
-                    username = "$mavenCentralUser"
+                if (project.properties.containsKey('mavenCentralTokenUser')) {
+                    username = "$mavenCentralTokenUser"
                 }
-                if (project.properties.containsKey('mavenCentralPassword')) {
-                    password = "$mavenCentralPassword"
+                if (project.properties.containsKey('mavenCentralTokenPassword')) {
+                    password = "$mavenCentralTokenPassword"
                 }
             }
         }

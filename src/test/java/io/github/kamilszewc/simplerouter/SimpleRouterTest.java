@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import java.net.URISyntaxException;
 
+import static io.github.kamilszewc.simplerouter.SimpleRouter.Method.ANY;
 import static io.github.kamilszewc.simplerouter.SimpleRouter.Method.GET;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -70,6 +71,30 @@ public class SimpleRouterTest {
                 assertSame(request, r);
                 assertEquals(v.size(), 1);
                 assertEquals(v.get("var2"), "value2");
+                return "OK";
+            });
+
+            Object response = simpleRouter.route(request);
+            System.out.println(response);
+
+        } catch (NoRoutingException ex) {
+            System.out.println("No routing");
+
+        } catch (URISyntaxException e) {
+            System.out.println("Wrong request uri");
+        }
+    }
+
+    @Test
+    public void routingWithNoPathVariablesAndAnyRouteMethod() {
+
+        try {
+            Request request = new Request(GET, "/api/v2/something1?par1=val1&par2=val2");
+
+            var simpleRouter = new SimpleRouter();
+            simpleRouter.addRoute(ANY, "/api/v2/something1", (r, v) -> {
+                assertSame(request, r);
+                assertEquals(v.size(), 0);
                 return "OK";
             });
 

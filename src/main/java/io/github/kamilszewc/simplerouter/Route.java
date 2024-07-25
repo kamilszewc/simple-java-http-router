@@ -23,26 +23,8 @@ public class Route {
         return method;
     }
 
-    public static class RoutingContext {
-        private Request request;
-        private Map<String, String> pathVariables = new HashMap<>();
-
-        public RoutingContext(Request request, Map<String, String> pathVariables) {
-            this.request = request;
-            this.pathVariables = pathVariables;
-        }
-
-        public Request getRequest() {
-            return request;
-        }
-
-        public Map<String, String> getPathVariables() {
-            return pathVariables;
-        }
-    }
-
     public Object callMethod(RoutingContext routingContext) {
-        return methodHandler.handler(routingContext.getRequest(), routingContext.getPathVariables());
+        return methodHandler.handler(routingContext);
     }
 
     public RoutingContext checkRouting(Request request) throws NoRoutingException {

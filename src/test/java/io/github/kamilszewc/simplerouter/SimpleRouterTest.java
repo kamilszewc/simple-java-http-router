@@ -17,9 +17,9 @@ public class SimpleRouterTest {
             Request request = new Request(GET, "/api/v2/something1?par1=val1&par2=val2");
 
             var simpleRouter = new SimpleRouter();
-            simpleRouter.addRoute(GET, "/api/v2/something1", (r, v) -> {
-                assertSame(request, r);
-                assertEquals(v.size(), 0);
+            simpleRouter.addRoute(GET, "/api/v2/something1", (c) -> {
+                assertSame(request, c.getRequest());
+                assertEquals(c.getPathVariables().size(), 0);
                 return "OK";
             });
 
@@ -41,11 +41,11 @@ public class SimpleRouterTest {
             Request request = new Request(GET, "/api/v2/something1/value1/something2/value2?par1=val1&par2=val2");
 
             var simpleRouter = new SimpleRouter();
-            simpleRouter.addRoute(GET, "/api/v2/something1/:var1/something2/:var2", (r, v) -> {
-                assertSame(request, r);
-                assertEquals(v.size(), 2);
-                assertEquals(v.get("var1"), "value1");
-                assertEquals(v.get("var2"), "value2");
+            simpleRouter.addRoute(GET, "/api/v2/something1/:var1/something2/:var2", (c) -> {
+                assertSame(request, c.getRequest());
+                assertEquals(c.getPathVariables().size(), 2);
+                assertEquals(c.getPathVariables().get("var1"), "value1");
+                assertEquals(c.getPathVariables().get("var2"), "value2");
                 return "OK";
             });
 
@@ -67,10 +67,10 @@ public class SimpleRouterTest {
             Request request = new Request(GET, "https://test.com/api/v2/something1/value1/something2/value2?par1=val1&par2=val2");
 
             var simpleRouter = new SimpleRouter();
-            simpleRouter.addRoute(GET, "/api/v2/something1/*/something2/:var2", (r, v) -> {
-                assertSame(request, r);
-                assertEquals(v.size(), 1);
-                assertEquals(v.get("var2"), "value2");
+            simpleRouter.addRoute(GET, "/api/v2/something1/*/something2/:var2", (c) -> {
+                assertSame(request, c.getRequest());
+                assertEquals(c.getPathVariables().size(), 1);
+                assertEquals(c.getPathVariables().get("var2"), "value2");
                 return "OK";
             });
 
@@ -92,9 +92,33 @@ public class SimpleRouterTest {
             Request request = new Request(GET, "/api/v2/something1?par1=val1&par2=val2");
 
             var simpleRouter = new SimpleRouter();
-            simpleRouter.addRoute(ANY, "/api/v2/something1", (r, v) -> {
-                assertSame(request, r);
-                assertEquals(v.size(), 0);
+            simpleRouter.addRoute(ANY, "/api/v2/something1", (c) -> {
+                assertSame(request, c.getRequest());
+                assertEquals(c.getPathVariables().size(), 0);
+                return "OK";
+            });
+
+            Object response = simpleRouter.route(request);
+            System.out.println(response);
+
+        } catch (NoRoutingException ex) {
+            System.out.println("No routing");
+
+        } catch (URISyntaxException e) {
+            System.out.println("Wrong request uri");
+        }
+    }
+
+    @Test
+    public void routingWithNoPathVariablesWithMethodsAsString() {
+
+        try {
+            Request request = new Request("GeT", "/api/v2/something1?par1=val1&par2=val2");
+
+            var simpleRouter = new SimpleRouter();
+            simpleRouter.addRoute("gEt", "/api/v2/something1", (c) -> {
+                assertSame(request, c.getRequest());
+                assertEquals(c.getPathVariables().size(), 0);
                 return "OK";
             });
 

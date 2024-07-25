@@ -29,11 +29,14 @@ public class SimpleRouter {
 
     public Object route(Request request) throws NoRoutingException {
         for (var route : routes) {
-            if (route.allowsRouting(request)) {
-                System.out.println("Fits with route " + route.getMethod() + " " + route.getPath());
-                return route.callMethod(request);
-            }
+
+            try {
+                var context = route.checkRouting(request);
+                return route.callMethod(context);
+
+            } catch (Exception ignore) {}
         }
+
         throw new NoRoutingException();
     }
 }

@@ -32,7 +32,7 @@ public class Route {
         if (method != SimpleRouter.Method.ANY) {
             var requestMethod = request.getMethod();
             if (method != requestMethod) {
-                throw new NoRoutingException();
+                throw new NoRoutingException("Method " + method + "does not match request method " + requestMethod);
             }
         }
 
@@ -45,7 +45,7 @@ public class Route {
 
         Map<String, String> pathVariables = new HashMap<>();
 
-        int i=0;
+        int i;
         for (i=0; i<pathElements.length; i++) {
             try {
                 String pathElement = pathElements[i];
@@ -59,16 +59,16 @@ public class Route {
                 }
 
                 if (!pathElement.equals(requestPathElement)) {
-                    throw new NoRoutingException();
+                    throw new NoRoutingException("Path element " + pathElement + " does not match request path element: " + requestPathElement);
                 }
 
             } catch (Exception ex) {
-                throw new NoRoutingException();
+                throw new NoRoutingException("Exception while checking patch element: " + ex.getMessage());
             }
         }
 
         if (i < requestPathElements.length) {
-            throw new NoRoutingException();
+            throw new NoRoutingException("Request path is longer than path");
         }
 
         return new RoutingContext(request, pathVariables);

@@ -72,6 +72,6 @@ public class SimpleRouter {
             } catch (Exception ignore) {}
         }
 
-        throw new NoRoutingException();
+        throw new NoRoutingException("No such route: " + request.getPath() + " " + request.getMethod());
     }
 }

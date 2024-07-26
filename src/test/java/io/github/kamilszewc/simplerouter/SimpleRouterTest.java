@@ -133,4 +133,42 @@ public class SimpleRouterTest {
         }
     }
 
+
+    @Test
+    public void routingComplex() {
+
+        try {
+            Request request = new Request(GET, "/api/v2/something1/value1/value2?par1=val1&par2=val2");
+
+            var simpleRouter = new SimpleRouter();
+            simpleRouter.addRoute(GET, "/api/v2/something1/:var1/something2", (c) -> {
+                return "ERROR";
+            });
+            simpleRouter.addRoute("get", "/api/v2/something1/something2", (c) -> {
+                return "ERROR";
+            });
+            simpleRouter.addRoute("gEt", "/api/v2", (c) -> {
+                return "ERROR";
+            });
+            simpleRouter.addRoute(GET, "/api/v2/something1/:var1/:var2", (c) -> {
+                assertSame(request, c.getRequest());
+                assertEquals(c.getPathVariables().size(), 2);
+                assertEquals(c.getPathVariables().get("var1"), "value1");
+                assertEquals(c.getPathVariables().get("var2"), "value2");
+                return "OK";
+            });
+            simpleRouter.addRoute(ANY, "/api/v2/*", (c) -> {
+                return "ERROR";
+            });
+
+            Object response = simpleRouter.route(request);
+            System.out.println(response);
+
+        } catch (NoRoutingException ex) {
+            System.out.println("No routing");
+
+        } catch (URISyntaxException e) {
+            System.out.println("Wrong request uri");
+        }
+    }
 }

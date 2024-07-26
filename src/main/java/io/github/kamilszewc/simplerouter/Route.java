@@ -45,7 +45,8 @@ public class Route {
 
         Map<String, String> pathVariables = new HashMap<>();
 
-        for (int i=0; i<pathElements.length; i++) {
+        int i=0;
+        for (i=0; i<pathElements.length; i++) {
             try {
                 String pathElement = pathElements[i];
                 String requestPathElement = requestPathElements[i];
@@ -64,6 +65,10 @@ public class Route {
             } catch (Exception ex) {
                 throw new NoRoutingException();
             }
+        }
+
+        if (i < requestPathElements.length) {
+            throw new NoRoutingException();
         }
 
         return new RoutingContext(request, pathVariables);

@@ -132,4 +132,5 @@ public class SimpleRouterTest {
             System.out.println("Wrong request uri");
         }
     }
+
 }

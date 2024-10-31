@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class RoutingContext {
-    private Request request;
+    private final Request request;
     private Map<String, String> pathVariables = new HashMap<>();
 
     public RoutingContext(Request request, Map<String, String> pathVariables) {

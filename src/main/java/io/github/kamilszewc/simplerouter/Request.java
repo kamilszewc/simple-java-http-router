@@ -1,5 +1,8 @@
 package io.github.kamilszewc.simplerouter;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -14,6 +17,7 @@ public class Request {
     private final SimpleRouter.Method method;
     private final URI uri;
     private Map<String, String> parameters = new HashMap<>();
+    private Multimap<String, String> headers = ArrayListMultimap.create();
 
     /**
      * Constructor
@@ -85,6 +89,34 @@ public class Request {
     }
 
     /**
+     * Constructor
+     * @param method Http method
+     * @param path Path
+     * @param parameters Path parameters map
+     * @param headers Headers multi map
+     * @throws URISyntaxException Risen when path can not be converted to URI
+     */
+    public Request(SimpleRouter.Method method, String path, Map<String, String> parameters, Multimap<String, String> headers) throws URISyntaxException {
+        this.method = method;
+        this.uri = new URI(path);
+        this.parameters = parameters;
+        this.headers = headers;
+    }
+
+    /**
+     * Constructor
+     * @param method Http method
+     * @param path Path
+     * @param headers Headers multi map
+     * @throws URISyntaxException Risen when path can not be converted to URI
+     */
+    public Request(SimpleRouter.Method method, String path, Multimap<String, String> headers) throws URISyntaxException {
+        this.method = method;
+        this.uri = new URI(path);
+        this.headers = headers;
+    }
+
+    /**
      * Returns http method of request
      * @return Http method
      */
@@ -106,5 +138,9 @@ public class Request {
 
     public Map<String, String> getParameters() {
         return parameters;
+    }
+
+    public Multimap<String, String> getHeaders() {
+        return headers;
     }
 }

@@ -31,7 +31,7 @@ public class SimpleRouter {
      * Add routing path
      * @param route Route object
      */
-    public void addRoute(Route route) {
+    public void addRoute(PathRoute route) {
         routes.add(route);
     }
 
@@ -42,8 +42,8 @@ public class SimpleRouter {
      * @param methodHandler Method to be called
      */
     public void addRoute(Method method, String path, MethodHandler methodHandler) {
-        Route route = new Route(method, path, methodHandler);
-        routes.add(route);
+        PathRoute pathRoute = new PathRoute(method, path, methodHandler);
+        routes.add(pathRoute);
     }
 
     /**
@@ -57,6 +57,27 @@ public class SimpleRouter {
     }
 
     /**
+     * Add header-based routing
+     * @param method Http method
+     * @param header Path (URI)
+     * @param methodHandler Method to be called
+     */
+    public void addHeaderRoute(Method method, String header, MethodHandler methodHandler) {
+        var headerRoute = new HeaderRoute(method, header, methodHandler);
+        routes.add(headerRoute);
+    }
+
+    /**
+     * Add routing path
+     * @param method Http method
+     * @param header Path (URI)
+     * @param methodHandler Method to be called
+     */
+    public void addHeaderRoute(String method, String header, MethodHandler methodHandler) {
+        addHeaderRoute(Method.valueOf(method.toUpperCase()), header, methodHandler);
+    }
+
+    /**
      * Process routing
      * @param request Request object
      * @return Return object of the called java method
@@ -64,7 +85,6 @@ public class SimpleRouter {
      */
     public Object route(Request request) throws NoRoutingException {
         for (var route : routes) {
-
             try {
                 var context = route.checkRouting(request);
                 return route.callMethod(context);

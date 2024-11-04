@@ -1,5 +1,7 @@
 package io.github.kamilszewc.simplerouter;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
 import org.junit.jupiter.api.Test;
 
 import java.net.URISyntaxException;
@@ -14,7 +16,7 @@ public class SimpleRouterTest {
     @Test
     public void routingWithNoPathVariables() {
 
-        try {
+        assertDoesNotThrow(() -> {
             Request request = new Request(GET, "/api/v2/something1?par1=val1&par2=val2");
 
             var simpleRouter = new SimpleRouter();
@@ -26,19 +28,13 @@ public class SimpleRouterTest {
 
             Object response = simpleRouter.route(request);
             System.out.println(response);
-
-        } catch (NoRoutingException ex) {
-            System.out.println("No routing");
-
-        } catch (URISyntaxException e) {
-            System.out.println("Wrong request uri");
-        }
+        });
     }
 
     @Test
     public void routingWithNoPathVariablesExplicitParametersPass() {
 
-        try {
+        assertDoesNotThrow(() -> {
             Request request = new Request(GET, "/api/v2/something1?par1=val1&par2=val2", Map.of("par1", "val1", "par2", "val2"));
 
             var simpleRouter = new SimpleRouter();
@@ -51,19 +47,13 @@ public class SimpleRouterTest {
 
             Object response = simpleRouter.route(request);
             System.out.println(response);
-
-        } catch (NoRoutingException ex) {
-            System.out.println("No routing");
-
-        } catch (URISyntaxException e) {
-            System.out.println("Wrong request uri");
-        }
+        });
     }
 
     @Test
     public void routingWithPathVariables() {
 
-        try {
+        assertDoesNotThrow(() -> {
             Request request = new Request(GET, "/api/v2/something1/value1/something2/value2?par1=val1&par2=val2");
 
             var simpleRouter = new SimpleRouter();
@@ -77,19 +67,13 @@ public class SimpleRouterTest {
 
             Object response = simpleRouter.route(request);
             System.out.println(response);
-
-        } catch (NoRoutingException ex) {
-            System.out.println("No routing");
-
-        } catch (URISyntaxException e) {
-            System.out.println("Wrong request uri");
-        }
+        });
     }
 
     @Test
     public void routingWithPathVariablesAndAnyArgument() {
 
-        try {
+        assertDoesNotThrow(() -> {
             Request request = new Request(GET, "https://test.com/api/v2/something1/value1/something2/value2?par1=val1&par2=val2");
 
             var simpleRouter = new SimpleRouter();
@@ -102,19 +86,13 @@ public class SimpleRouterTest {
 
             Object response = simpleRouter.route(request);
             System.out.println(response);
-
-        } catch (NoRoutingException ex) {
-            System.out.println("No routing");
-
-        } catch (URISyntaxException e) {
-            System.out.println("Wrong request uri");
-        }
+        });
     }
 
     @Test
     public void routingWithNoPathVariablesAndAnyRouteMethod() {
 
-        try {
+        assertDoesNotThrow(() -> {
             Request request = new Request(GET, "/api/v2/something1?par1=val1&par2=val2");
 
             var simpleRouter = new SimpleRouter();
@@ -126,19 +104,13 @@ public class SimpleRouterTest {
 
             Object response = simpleRouter.route(request);
             System.out.println(response);
-
-        } catch (NoRoutingException ex) {
-            System.out.println("No routing");
-
-        } catch (URISyntaxException e) {
-            System.out.println("Wrong request uri");
-        }
+        });
     }
 
     @Test
     public void routingWithNoPathVariablesWithMethodsAsString() {
 
-        try {
+        assertDoesNotThrow(() -> {
             Request request = new Request("GeT", "/api/v2/something1?par1=val1&par2=val2");
 
             var simpleRouter = new SimpleRouter();
@@ -150,20 +122,14 @@ public class SimpleRouterTest {
 
             Object response = simpleRouter.route(request);
             System.out.println(response);
-
-        } catch (NoRoutingException ex) {
-            System.out.println("No routing");
-
-        } catch (URISyntaxException e) {
-            System.out.println("Wrong request uri");
-        }
+        });
     }
 
 
     @Test
     public void routingComplex() {
 
-        try {
+        assertDoesNotThrow(() -> {
             Request request = new Request(GET, "/api/v2/something1/value1/value2?par1=val1&par2=val2");
 
             var simpleRouter = new SimpleRouter();
@@ -190,11 +156,25 @@ public class SimpleRouterTest {
             Object response = simpleRouter.route(request);
             System.out.println(response);
 
-        } catch (NoRoutingException ex) {
-            System.out.println("No routing");
+        });
+    }
 
-        } catch (URISyntaxException e) {
-            System.out.println("Wrong request uri");
-        }
+    @Test
+    public void headerBasedRouting() {
+
+        assertDoesNotThrow(() -> {
+            Multimap<String, String> headers = ArrayListMultimap.create();
+            headers.put("key", "value");
+            Request request = new Request(GET, "/api/v2/something1", headers);
+
+            var simpleRouter = new SimpleRouter();
+            simpleRouter.addHeaderRoute(GET, "key", (c) -> {
+                assertSame(request, c.getRequest());
+                return "OK";
+            });
+
+            Object response = simpleRouter.route(request);
+            System.out.println(response);
+        });
     }
 }
